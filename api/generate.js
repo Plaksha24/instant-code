@@ -14,14 +14,8 @@ export default async function handler(req, res) {
 
     const apiKey = process.env.GROQ_API_KEY;
     if (!apiKey) {
-      return res.status(500).json({ error: "GROQ_API_KEY not set in environment" });
+      return res.status(500).json({ error: "API key missing" });
     }
-
-    const systemPrompt = `You are an expert frontend developer. Analyze the UI screenshot and generate clean, production-ready HTML and CSS code.
-
-Style: ${style || 'Clean, semantic HTML with modern CSS'}
-
-Return ONLY complete HTML with embedded CSS. Start with <!DOCTYPE html> - nothing else before it.`;
 
     const response = await fetch("https://api.groq.com/openai/v1/chat/completions", {
       method: "POST",
@@ -35,18 +29,18 @@ Return ONLY complete HTML with embedded CSS. Start with <!DOCTYPE html> - nothin
           { 
             role: "user", 
             content: [
-              { type: "text", text: systemPrompt },
+              { 
+                type: "text", 
+                text: "Convert this UI screenshot to HTML and CSS. Return only the complete HTML code starting with <!DOCTYPE html>" 
+              },
               { 
                 type: "image_url", 
-                image_url: {
-                  url: `data:${mimeType};base64,${image}`
-                }
+                image_url: { url: `data:${mimeType};base64,${image}` }
               }
             ]
           }
         ],
         max_tokens: 2000,
-        temperature: 0.3
       }),
     });
 
@@ -54,25 +48,15 @@ Return ONLY complete HTML with embedded CSS. Start with <!DOCTYPE html> - nothin
 
     if (!response.ok) {
       return res.status(500).json({ 
-        error: `Groq API error: ${data.error?.message || 'Unknown error'}` 
+        error: `Groq error: ${JSON.stringify(data)}` 
       });
     }
 
-    if (!data.choices?.[0]?.message?.content) {
-      return res.status(500).json({ error: "No response from Groq" });
-    }
-
-    let code = data.choices[0].message.content.trim();
-    code = code.replace(/```html\n?/g, '').replace(/```\n?/g, '').trim();
-    
-    if (!code.toLowerCase().startsWith('<!doctype')) {
-      code = '<!DOCTYPE html>\n' + code;
-    }
+    const code = data.choices[0].message.content.trim();
 
     res.status(200).json({ code });
     
   } catch (err) {
-    console.error('Error:', err);
-    res.status(500).json({ error: err.message || "Server error" });
+    res.status(500).json({ error: err.message });
   }
 }
