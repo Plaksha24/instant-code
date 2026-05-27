@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>InstantCode — AI Screenshot to Code Converter</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="style.css" />
+</head>
+<body>
+ 
+<!-- Nav -->
+<nav>
+  <a class="nav-logo" href="#">⚡ InstantCode</a>
+  <span class="nav-tag">AI Screenshot to Code</span>
+</nav>
+ 
+<!-- Hero with Upload -->
+<section class="hero">
+  <div class="hero-content">
+    <div class="hero-text">
+      <h1>Turn any screenshot<br/>into <em>instant code.</em></h1>
+      <p class="sub">Upload a UI screenshot. Get production-ready HTML & CSS in seconds. No signup. No cost.</p>
+    </div>
+ 
+    <!-- Upload right on hero -->
+    <div class="hero-upload">
+      <div class="drop-zone" id="dropZone">
+        <div class="drop-icon">📸</div>
+        <p class="drop-title">Drop screenshot here</p>
+        <p class="drop-sub">or click to browse</p>
+        <input type="file" id="fileInput" accept="image/*" hidden />
+      </div>
+ 
+      <div class="preview-box" id="previewBox" style="display:none;">
+        <img id="previewImg" src="" alt="preview" />
+        <button class="remove-btn" onclick="removeImage()">✕ Remove</button>
+      </div>
+ 
+      <div class="options">
+        <div class="option-label">Output style:</div>
+        <div class="option-btns">
+          <button class="opt-btn active" data-style="clean">Clean</button>
+          <button class="opt-btn" data-style="minimal">Minimal</button>
+          <button class="opt-btn" data-style="detailed">Detailed</button>
+        </div>
+      </div>
+ 
+      <button class="generate-btn" id="generateBtn" onclick="generate()">
+        <span id="btnText">⚡ Generate Code</span>
+      </button>
+ 
+      <div class="error-box" id="errorBox"></div>
+    </div>
+  </div>
+</section>
+ 
+<!-- Results Section -->
+<section id="results-section" style="display:none; padding: 80px 48px; max-width: 1400px; margin: 0 auto;">
+  <div class="output-panel">
+    <div class="panel-label">Generated Code</div>
+ 
+    <div class="output-tabs">
+      <button class="tab active" onclick="switchTab('code')" id="tabCode">Code</button>
+      <button class="tab" onclick="switchTab('preview')" id="tabPreview">Preview</button>
+    </div>
+ 
+    <div id="codeView">
+      <div class="code-block" id="codeBlock">
+        <div class="code-actions">
+          <button class="action-btn" onclick="copyCode()">📋 Copy</button>
+          <button class="action-btn" onclick="downloadCode()">⬇️ Download</button>
+        </div>
+        <pre id="codeContent"></pre>
+      </div>
+    </div>
+ 
+    <div id="previewView" style="display:none;">
+      <div class="preview-frame-wrap">
+        <iframe id="previewFrame" sandbox="allow-scripts"></iframe>
+      </div>
+    </div>
+  </div>
+</section>
+ 
+<!-- How it works -->
+<section class="how">
+  <div class="how-inner">
+    <p class="eyebrow">// how it works</p>
+    <h2>Three steps to clean code.</h2>
+    <div class="steps-grid">
+      <div class="step-card">
+        <div class="step-num">01</div>
+        <div class="step-icon">📸</div>
+        <h3>Upload</h3>
+        <p>Drop any UI screenshot — website, app, mockup, or design file.</p>
+      </div>
+      <div class="step-card">
+        <div class="step-num">02</div>
+        <div class="step-icon">🤖</div>
+        <h3>Analyze</h3>
+        <p>AI vision model reads every pixel, understands layout and components.</p>
+      </div>
+      <div class="step-card">
+        <div class="step-num">03</div>
+        <div class="step-icon">⚡</div>
+        <h3>Code</h3>
+        <p>Get clean, production-ready HTML & CSS. Copy or download instantly.</p>
+      </div>
+    </div>
+  </div>
+</section>
+ 
+<footer>
+  <span>⚡ InstantCode — AI Screenshot to Code Converter</span>
+  <span>Free. Forever.</span>
+</footer>
+ 
+ 
+<!-- Loading overlay -->
+<div class="loading-overlay" id="loadingOverlay">
+  <div class="loading-inner">
+    <div class="loading-spinner"></div>
+    <p class="loading-text" id="loadingText">Analyzing screenshot...</p>
+    <div class="loading-steps">
+      <div class="step" id="step1">👁️ Vision model reading image</div>
+      <div class="step" id="step2">🧠 Understanding layout</div>
+      <div class="step" id="step3">✍️ Writing HTML & CSS</div>
+      <div class="step" id="step4">✅ Finalizing code</div>
+    </div>
+  </div>
+</div>
+ 
+<script src="script.js"></script>
+</body>
+</html>
+ 
