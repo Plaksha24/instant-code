@@ -22,17 +22,17 @@ export default async function handler(req, res) {
         "Authorization": `Bearer ${apiKey}`,
       },
       body: JSON.stringify({
-        model: "gpt-4-vision",
+        model: "meta-llama/llama-4-scout-17b-16e-instruct",
         messages: [
           { 
             role: "user", 
             content: [
-              { type: "text", text: "Generate HTML/CSS for this UI" },
+              { type: "text", text: "Convert this UI screenshot to clean HTML and CSS. Return only complete HTML code starting with <!DOCTYPE html>" },
               { type: "image_url", image_url: { url: `data:${mimeType};base64,${image}` } }
             ]
           }
         ],
-        max_tokens: 1500,
+        max_tokens: 2000,
       }),
     });
 
@@ -41,7 +41,9 @@ export default async function handler(req, res) {
       return res.status(500).json({ error: JSON.stringify(data) });
     }
 
-    const code = data.choices[0].message.content;
+    let code = data.choices[0].message.content.trim();
+    code = code.replace(/```html\n?/g, '').replace(/```\n?/g, '').trim();
+
     res.status(200).json({ code });
     
   } catch (err) {
