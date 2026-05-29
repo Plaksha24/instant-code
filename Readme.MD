@@ -28,6 +28,6 @@ Generates clean HTML & CSS that matches the design
 View live preview or download the code
 
 🌐 Live Demo
-[Add your Vercel link here]
+instant-code.vercel.app
 👨‍💻 Author
 Plaksha Biradar
